@@ -9,10 +9,14 @@ import Button from './src/components/atoms/Button';
 import Input from './src/components/atoms/Input';
 import AuthForm from './src/components/moleculs/AuthForm';
 import AuthOrganism from './src/components/organism/AuthOrganism';
+import { NavigationContainer } from '@react-navigation/native';
+import RootStack from './src/navigation/RootStack';
 
 export default function App() {
   return (
-    <AuthOrganism type='login' />
+    <NavigationContainer>
+      <RootStack/>
+    </NavigationContainer>
   );
 }
 

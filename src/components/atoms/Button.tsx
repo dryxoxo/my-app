@@ -6,11 +6,13 @@ interface ButtonProps {
   Icon?: React.ComponentType<SvgProps>;
   text: string;
   variant: 'primary' | 'outline';
+  onPress?: () => void;
 }
 
-const Button: React.FC<ButtonProps> = ({ Icon, text, variant }) => {
+const Button: React.FC<ButtonProps> = ({ Icon, text, variant, onPress }) => {
   return (
     <TouchableOpacity
+    onPress={onPress}
       style={[
         styles.baseButton,
         variant === 'primary' && styles.primaryButton,
