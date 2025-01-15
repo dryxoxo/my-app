@@ -1,9 +1,10 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import ScreenTemplate from '../template/ScreenTemplate'
-import Backdrop from '../atoms/Backdrop'
-import AuthForm from '../moleculs/AuthForm'
-import AuthMessage from '../moleculs/AuthMessage'
+import ScreenTemplate from '../../template/ScreenTemplate'
+import Backdrop from '../../atoms/Backdrop'
+import AuthMessage from '../../moleculs/auth/AuthMessage'
+import AuthForm from '../../moleculs/auth/AuthForm'
+
 
 interface AuthOrganismProps {
     type: 'login' | 'signup'

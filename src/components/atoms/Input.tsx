@@ -4,10 +4,12 @@ import React from 'react'
 
 interface InputProps {
   type: 'email-address' | 'numeric' | 'default';
-  placeholder: string
+  placeholder: string;
+  onChangeText?: (text: string)=>void;
+  value?: string;
 }
 
-const Input: React.FC<InputProps> = ({type, placeholder}) => {
+const Input: React.FC<InputProps> = ({type, placeholder, onChangeText}) => {
   return (
     <TextInput
       style={{
@@ -18,6 +20,7 @@ const Input: React.FC<InputProps> = ({type, placeholder}) => {
         borderRadius: 10,
         padding: 10,
       }}
+      onChangeText={onChangeText}
       placeholder={placeholder}
       keyboardType={type}
     />

@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import AuthOrganism from '../../components/organism/AuthOrganism'
+import AuthOrganism from '../../components/organism/auth/AuthOrganism'
 
 const RegisterPage = () => {
   return (

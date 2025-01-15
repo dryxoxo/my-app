@@ -1,8 +1,8 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
-import { LightTheme } from '../../theme/theme'
+import { LightTheme } from '../../../theme/theme'
 import { useNavigation } from '@react-navigation/native'
-import { RootStackNavigationProp } from '../../navigation/types'
+import { RootStackNavigationProp } from '../../../navigation/types'
 
 interface AuthMessageProps {
     type: 'login' | 'signup'
