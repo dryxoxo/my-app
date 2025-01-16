@@ -5,21 +5,23 @@ import { OtpInput } from 'react-native-otp-entry'
 
 interface otpProps {
     onTextChange?: (text: string)=>void;
+    validateOtp?: boolean;
   }
 
 const OTPInput: React.FC<otpProps> = ({onTextChange}) => {
     return (
         <OtpInput
             numberOfDigits={6}
-            focusColor="green"
-            autoFocus={false}
-            hideStick={true}
+            focusColor="pink"
+            autoFocus={true}
+            hideStick={false}
             placeholder=" "
             blurOnFilled={true}
             disabled={false}
             type="numeric"
             secureTextEntry={false}
             focusStickBlinkingDuration={500}
+            onTextChange={(text) => console.log(text)}
             onFilled={onTextChange}
             textInputProps={{
                 accessibilityLabel: "One-Time Password",
@@ -50,8 +52,8 @@ const styles = StyleSheet.create({
         marginBottom: 20
     },
     pinCodeContainer: {
-        width: 40,
-        height: 40,
+        width: 50,
+        height: 50,
         borderWidth: 0,
         borderColor: '#ccc',
         borderRadius: 2,
@@ -64,12 +66,18 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     focusStick: {
-        height: 2,
+        height: '80%',
+        borderWidth: 1,
+        borderColor: 'blue',
         backgroundColor: 'green',
         width: '100%',
+        marginVertical: 'auto'
     },
     activePinCodeContainer: {
-        borderColor: 'green',
+        borderWidth: 0,
+        borderColor: 'white',
+        backgroundColor: 'red',
+        borderRadius: 15
     },
     placeholderText: {
         fontSize: 18,
@@ -84,3 +92,4 @@ const styles = StyleSheet.create({
         backgroundColor: '#f7f7f7',
     },
 });
+

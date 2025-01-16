@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { Alert, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import { DeviceOTP } from '../../../assets/icons/icons'
 import OTPInput from '../../moleculs/auth/OTPInput'
@@ -8,13 +8,15 @@ import Button from '../../atoms/Button'
 const OTPOrganism = () => {
 
     const [OTP, setOTP] = useState<string>('')
+    const expectedOTP = '123456'
+
 
     const handleOTP = () => {
-        const payload = {
-            OTP
+        if(OTP === expectedOTP){
+            Alert.alert('OTP Berhasil')
+        } else {
+            Alert.alert('OTP Salah')
         }
-
-        console.log("OTP: ", payload)
     }
 
     return (

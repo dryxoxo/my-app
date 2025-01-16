@@ -5,6 +5,8 @@ import { Google } from '../../../assets/icons/icons'
 import Input from '../../atoms/Input'
 import { useNavigation } from '@react-navigation/native'
 import { RootStackNavigationProp } from '../../../navigation/types'
+import { login } from '../../../api/userGeneral'
+import { registerNewAccount } from '../../../api/userRegister'
 
 
 interface AuthFormProps {
@@ -20,24 +22,37 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
 
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
-    const [full_name, setfull_name] = useState<string>('')
-    const [phone_number, setphone_number] = useState<string>('')
+    const [fullname, setfullname] = useState<string>('')
+    const [phoneNumber, setphoneNumber] = useState<string>('')
 
 
-    const handleLogin = () => {
+    const handleLogin = async () => {
         const formLogin = {
             username,
             password,
         };
+
+        try {
+            const result = await login(username, password)
+            console.log('result: ', result?.data?.data?.unique_id);
+        } catch (error) {
+            console.log('error', error)
+        }
         navigation.navigate('OTP')
-        console.log('Login Form:', formLogin);
     };
 
-    const handleRegister = () => {
+    const handleRegister = async () => {
         const formLogin = {
-            full_name,
-            phone_number
+            fullname,
+            phoneNumber
         };
+
+        try {
+            const result = await registerNewAccount(fullname, phoneNumber)
+            console.log('result: ', result?.data?.data?.unique_id);
+        } catch (error) {
+            console.log(error)
+        }
         navigation.navigate('OTP')
         console.log('Register Form:', formLogin);
     };
@@ -81,8 +96,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
             ) : (
                 <>
                     <View style={{ flexDirection: 'column', gap: 16 }}>
-                        <Input type='default' placeholder='Fullname' value={full_name} onChangeText={setfull_name}/>
-                        <Input type='numeric' placeholder='Phone Number' value={phone_number} onChangeText={setphone_number}/>
+                        <Input type='default' placeholder='Fullname' value={fullname} onChangeText={setfullname} />
+                        <Input type='numeric' placeholder='Phone Number' value={phoneNumber} onChangeText={setphoneNumber} />
                     </View>
                     <Button variant='primary' text='Sign Up' onPress={handleRegister} />
                     <View style={{ flexDirection: 'row', alignContent: 'center' }}>
@@ -90,7 +105,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
                         <Text style={{ marginHorizontal: 16, color: '#6c7278' }}>Or</Text>
                         <View style={{ flex: 1, height: 1, borderWidth: 1, borderColor: '#e6eaec', marginVertical: 'auto' }} />
                     </View>
-                    <Button variant='outline' Icon={Google} text='Sign Up With Google'/>
+                    <Button variant='outline' Icon={Google} text='Sign Up With Google' />
                 </>
             )}
 
