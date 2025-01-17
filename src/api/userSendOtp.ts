@@ -1,8 +1,8 @@
 import axios from "./axios";
 
-export const registerNewAccount = async (uniqueId:string) => {
+export const userSendOTP = async (uniqueId:string) => {
     try {
-        return await axios.post(`/user/register/new-account/${uniqueId}`);
+        return await axios.post(`/user/send-otp/phone-number/${uniqueId}`);
     } catch (error) {
         console.log('error api: ', error);
     }
