@@ -9,7 +9,8 @@ import { login } from '../../../api/userGeneral'
 import { registerNewAccount } from '../../../api/userRegister'
 import { userSendOTP } from '../../../api/userSendOtp'
 import { getItem, setItem } from '../../../utils/asyncStorage'
-
+import { useAppDispatch, useAppSelector } from '../../../hooks/hooks'
+import { register } from '../../../redux/auth/authSlice'
 
 interface AuthFormProps {
     type: 'login' | 'signup'
@@ -23,6 +24,9 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
     const [password, setPassword] = useState<string>('')
     const [fullname, setfullname] = useState<string>('')
     const [phoneNumber, setphoneNumber] = useState<string>('')
+
+    const dispatch = useAppDispatch()
+    const uniqueId = useAppSelector((state) => { state.auth.unique_id })
 
     const goToRegister = () => { navigation.navigate('Register') }
     const goToOTP = () => { navigation.navigate('OTP') }
@@ -43,23 +47,16 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
     };
 
     const handleRegister = async () => {
-        const formLogin = {
-            fullname,
-            phoneNumber
-        };
-
         try {
             const result = await registerNewAccount(fullname, phoneNumber)
             const uniqueId = result?.data?.data?.unique_id
             const resultOTP = await userSendOTP(uniqueId)
-            setItem('unique_id', uniqueId)
-            console.log(resultOTP?.data)
+            dispatch(register(uniqueId))
         } catch (error) {
             console.log(error)
         }
         navigation.navigate('OTP')
-        console.log('Register Form:', formLogin);
-        console.log('Set item:', getItem('unique_id'));
+        console.log('uniqueId Redux:', uniqueId);
     };
 
     return (
