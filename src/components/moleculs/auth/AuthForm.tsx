@@ -11,6 +11,7 @@ import { userSendOTP } from '../../../api/userSendOtp'
 import { getItem, setItem } from '../../../utils/asyncStorage'
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks'
 import { register } from '../../../redux/auth/authSlice'
+import { RootState } from '../../../redux/store'
 
 interface AuthFormProps {
     type: 'login' | 'signup'
@@ -26,7 +27,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
     const [phoneNumber, setphoneNumber] = useState<string>('')
 
     const dispatch = useAppDispatch()
-    const uniqueId = useAppSelector((state) => { state.auth.unique_id })
+    // const uniqueId = useAppSelector((state) => { state.auth.unique_id })
 
     const goToRegister = () => { navigation.navigate('Register') }
     const goToOTP = () => { navigation.navigate('OTP') }
@@ -51,12 +52,12 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
             const result = await registerNewAccount(fullname, phoneNumber)
             const uniqueId = result?.data?.data?.unique_id
             const resultOTP = await userSendOTP(uniqueId)
-            dispatch(register(uniqueId))
+            console.log("dari api: ", uniqueId)
+            dispatch(register({unique_id: uniqueId}))
         } catch (error) {
             console.log(error)
         }
         navigation.navigate('OTP')
-        console.log('uniqueId Redux:', uniqueId);
     };
 
     return (

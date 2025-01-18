@@ -3,17 +3,27 @@ import React, { useState } from 'react'
 import { DeviceOTP } from '../../../assets/icons/icons'
 import OTPInput from '../../moleculs/auth/OTPInput'
 import Button from '../../atoms/Button'
+import { useAppSelector } from '../../../hooks/hooks'
+import { RootState } from '../../../redux/store'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 
 const OTPOrganism = () => {
 
     const [OTP, setOTP] = useState<string>('')
     const expectedOTP = '123456'
-
+    const uniqueId = useAppSelector((state: RootState) => state.auth.unique_id);
+    const checkStoredData = async () => {
+        const keys = await AsyncStorage.getAllKeys();
+        const data = await AsyncStorage.multiGet(keys);
+        console.log('Stored keys and values:', data);
+      };
 
     const handleOTP = () => {
         if(OTP === expectedOTP){
-            Alert.alert('OTP Berhasil')
+            Alert.alert(`OTP Berhasil: ${uniqueId}`)
+            checkStoredData();
+            console.log("result redux OTP:", uniqueId)
         } else {
             Alert.alert('OTP Salah')
         }
