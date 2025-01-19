@@ -6,6 +6,7 @@ export type RootStackParamList = {
   Login: undefined;
   Register: undefined;
   OTP: undefined;
+  Pin: undefined;
 };
 
 // Tipe navigasi untuk `useNavigation`

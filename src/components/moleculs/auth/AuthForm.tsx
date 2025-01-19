@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Alert, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Button from '../../atoms/Button'
 import { Google } from '../../../assets/icons/icons'
@@ -24,27 +24,24 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
     const [username, setUsername] = useState<string>('')
     const [password, setPassword] = useState<string>('')
     const [fullname, setfullname] = useState<string>('')
+    const [isLoading, setIsLoading] = useState<boolean>(false)
     const [phoneNumber, setphoneNumber] = useState<string>('')
 
     const dispatch = useAppDispatch()
-    // const uniqueId = useAppSelector((state) => { state.auth.unique_id })
-
     const goToRegister = () => { navigation.navigate('Register') }
     const goToOTP = () => { navigation.navigate('OTP') }
 
     const handleLogin = async () => {
-        const formLogin = {
-            username,
-            password,
-        };
-
+        setIsLoading(true)
         try {
             const result = await login(username, password)
-            console.log('result: ', result?.data?.data?.unique_id);
+            console.log('result: ', result?.data);
+            Alert.alert(`Token: ${result?.data.access_token}\nRefresh Token: ${result?.data.refresh_token}\nToken Type: ${result?.data.token_type}`);
         } catch (error) {
             console.log('error', error)
+        } finally {
+            setIsLoading(false)
         }
-        navigation.navigate('OTP')
     };
 
     const handleRegister = async () => {
@@ -88,7 +85,7 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
                             <Text style={{ color: '#4D81E7' }}>Forgot Password</Text>
                         </View>
                     </View>
-                    <Button onPress={handleLogin} variant='primary' text='Log In' />
+                    <Button onPress={handleLogin} variant='primary' text='Log In' isLoading={isLoading}/>
                     <View style={{ flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                         <Text style={{ color: '#6c7278' }}>Don't have an account? </Text>
                         <TouchableOpacity onPress={() => goToRegister()}>

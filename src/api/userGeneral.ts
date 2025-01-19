@@ -1,12 +1,23 @@
 import axios from "./axios";
 
+const getUser = async (username: string) => {
+    try {
+        const response = await axios.get(`/user/general/get-user/${username}`)
+        console.log('data api user: ', )
+        return response.data.data.unique_id
+    } catch (error) {
+        console.log(error)
+    }
+}
+
+
 export const login = async (username: string, password: string) => {
     try {
         const data = new URLSearchParams();
-        data.append('username', username);
-        data.append('password', password);
+        const uniqueId = await getUser(username);
 
-        console.log('data send api', data.toString());
+        data.append('username', uniqueId);
+        data.append('password', password);
 
         return await axios.post('/user/general/login', data.toString(), {
             headers: {

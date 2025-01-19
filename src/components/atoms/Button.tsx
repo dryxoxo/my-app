@@ -1,4 +1,4 @@
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { ActivityIndicator, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React from 'react';
 import { SvgProps } from 'react-native-svg';
 
@@ -7,9 +7,10 @@ interface ButtonProps {
   text: string;
   variant: 'primary' | 'outline';
   onPress?: () => void;
+  isLoading?: boolean
 }
 
-const Button: React.FC<ButtonProps> = ({ Icon, text, variant, onPress }) => {
+const Button: React.FC<ButtonProps> = ({ Icon, text, variant, onPress, isLoading }) => {
   return (
     <TouchableOpacity
     onPress={onPress}
@@ -18,18 +19,23 @@ const Button: React.FC<ButtonProps> = ({ Icon, text, variant, onPress }) => {
         variant === 'primary' && styles.primaryButton,
         variant === 'outline' && styles.outlineButton,
       ]}
+      disabled={isLoading}
     >
       <View style={styles.content}>
-        {Icon && <Icon width={18} height={18} />}
-        <Text
-          style={[
-            styles.text,
-            variant === 'primary' && styles.primaryText,
-            variant === 'outline' && styles.outlineText,
-          ]}
-        >
-          {text}
-        </Text>
+        {!isLoading && Icon && <Icon width={18} height={18} />}
+        {isLoading ? (
+          <ActivityIndicator />
+        ) : (
+          <Text
+            style={[
+              styles.text,
+              variant === 'primary' && styles.primaryText,
+              variant === 'outline' && styles.outlineText,
+            ]}
+          >
+            {text}
+          </Text>
+        )}
       </View>
     </TouchableOpacity>
   );
