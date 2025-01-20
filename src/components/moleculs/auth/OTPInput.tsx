@@ -21,7 +21,6 @@ const OTPInput: React.FC<otpProps> = ({onTextChange}) => {
             type="numeric"
             secureTextEntry={false}
             focusStickBlinkingDuration={500}
-            onTextChange={(text) => console.log(text)}
             onFilled={onTextChange}
             textInputProps={{
                 accessibilityLabel: "One-Time Password",

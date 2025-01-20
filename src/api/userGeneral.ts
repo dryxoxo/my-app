@@ -18,7 +18,6 @@ export const login = async (username: string, password: string) => {
 
         data.append('username', uniqueId);
         data.append('password', password);
-
         return await axios.post('/user/general/login', data.toString(), {
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded'

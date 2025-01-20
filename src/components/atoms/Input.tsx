@@ -7,16 +7,17 @@ interface InputProps {
   placeholder: string;
   onChangeText?: (text: string)=>void;
   value?: string;
+  isSuccess?: boolean;
 }
 
-const Input: React.FC<InputProps> = ({type, placeholder, onChangeText}) => {
+const Input: React.FC<InputProps> = ({type, placeholder, onChangeText, isSuccess = true}) => {
   return (
     <TextInput
       style={{
         paddingHorizontal: 14,
         paddingVertical: 12,
         borderWidth: 1,
-        borderColor: '#EFF0F6',
+        borderColor: isSuccess? '#EFF0F6':'red',
         borderRadius: 10,
         padding: 10,
       }}

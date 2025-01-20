@@ -12,6 +12,7 @@ import { getItem, setItem } from '../../../utils/asyncStorage'
 import { useAppDispatch, useAppSelector } from '../../../hooks/hooks'
 import { register } from '../../../redux/auth/authSlice'
 import { RootState } from '../../../redux/store'
+import { AxiosError } from 'axios'
 
 interface AuthFormProps {
     type: 'login' | 'signup'
@@ -26,6 +27,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
     const [fullname, setfullname] = useState<string>('')
     const [isLoading, setIsLoading] = useState<boolean>(false)
     const [phoneNumber, setphoneNumber] = useState<string>('')
+    const [isSuccess, setisSuccess] = useState<boolean>(true)
+    const [message, setmessage] = useState<string>('')
 
     const dispatch = useAppDispatch()
     const goToRegister = () => { navigation.navigate('Register') }
@@ -45,16 +48,24 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
     };
 
     const handleRegister = async () => {
+        setIsLoading(true)
         try {
             const result = await registerNewAccount(fullname, phoneNumber)
             const uniqueId = result?.data?.data?.unique_id
-            const resultOTP = await userSendOTP(uniqueId)
-            console.log("dari api: ", uniqueId)
+            await userSendOTP(uniqueId)
+            setisSuccess(true)
+            setmessage('')
             dispatch(register({unique_id: uniqueId}))
+            navigation.navigate('OTP')
         } catch (error) {
-            console.log(error)
+            if (error instanceof AxiosError && error.response?.data.detail) {
+                setmessage(error.response.data.detail);
+                setisSuccess(false)
+                console.log("masuk sini", message)
+            }
+        } finally {
+            setIsLoading(false)
         }
-        navigation.navigate('OTP')
     };
 
     return (
@@ -68,8 +79,8 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
                         <View style={{ flex: 1, height: 1, borderWidth: 1, borderColor: '#e6eaec', marginVertical: 'auto' }} />
                     </View>
                     <View style={{ flexDirection: 'column', gap: 16 }}>
-                        <Input type='default' placeholder='E-Mail Or Phone Number' onChangeText={setUsername} value={username} />
-                        <Input type='default' placeholder='Password' onChangeText={setPassword} value={password} />
+                        <Input type='default' placeholder='E-Mail Or Phone Number' onChangeText={setUsername} value={username}/>
+                        <Input type='default' placeholder='Password' onChangeText={setPassword} value={password}/>
                         <View style={{ flexDirection: 'row', width: '100%', justifyContent: 'space-between' }}>
                             <View style={{ flexDirection: 'row' }}>
                                 <TouchableOpacity style={{
@@ -96,10 +107,11 @@ const AuthForm: React.FC<AuthFormProps> = ({ type }) => {
             ) : (
                 <>
                     <View style={{ flexDirection: 'column', gap: 16 }}>
-                        <Input type='default' placeholder='Fullname' value={fullname} onChangeText={setfullname} />
-                        <Input type='numeric' placeholder='Phone Number' value={phoneNumber} onChangeText={setphoneNumber} />
+                        {message&&<Text style={{color: 'red', textAlign:'center'}}>{message}</Text>}
+                        <Input type='default' placeholder='Fullname' value={fullname} onChangeText={setfullname} isSuccess={isSuccess} />
+                        <Input type='numeric' placeholder='Phone Number' value={phoneNumber} onChangeText={setphoneNumber} isSuccess={isSuccess}/>
                     </View>
-                    <Button variant='primary' text='Sign Up' onPress={handleRegister} />
+                    <Button variant='primary' text='Sign Up' onPress={handleRegister} isLoading={isLoading}/>
                     <View style={{ flexDirection: 'row', alignContent: 'center' }}>
                         <View style={{ flex: 1, height: 1, borderWidth: 1, borderColor: '#e6eaec', marginVertical: 'auto' }} />
                         <Text style={{ marginHorizontal: 16, color: '#6c7278' }}>Or</Text>

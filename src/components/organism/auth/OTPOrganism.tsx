@@ -6,27 +6,43 @@ import Button from '../../atoms/Button'
 import { useAppSelector } from '../../../hooks/hooks'
 import { RootState } from '../../../redux/store'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { userVerifOTP } from '../../../api/userSendOtp'
+import axios from 'axios'
+import { useNavigation } from '@react-navigation/native'
+import { RootStackNavigationProp } from '../../../navigation/types'
 
 
 const OTPOrganism = () => {
 
+    const navigation = useNavigation<RootStackNavigationProp>();
     const [OTP, setOTP] = useState<string>('')
-    const expectedOTP = '123456'
     const uniqueId = useAppSelector((state: RootState) => state.auth.unique_id);
+    
     const checkStoredData = async () => {
         const keys = await AsyncStorage.getAllKeys();
         const data = await AsyncStorage.multiGet(keys);
         console.log('Stored keys and values:', data);
       };
 
-    const handleOTP = () => {
-        if(OTP === expectedOTP){
-            Alert.alert(`OTP Berhasil: ${uniqueId}`)
-            checkStoredData();
-            console.log("result redux OTP:", uniqueId)
-        } else {
-            Alert.alert('OTP Salah')
+    const handleOTP = async () => {
+        console.log(uniqueId)
+        try {
+            const result = await userVerifOTP(uniqueId as string, OTP)
+            const message = result.data.message
+            Alert.alert(message)
+            navigation.navigate('Login')
+            console.log("handleOTP:", message)
+        } catch (error) {
+            try {
+                const result = await userVerifOTP(uniqueId as string, OTP);
+                console.log("handleOTP result:", result);
+            } catch (error) {
+                if (axios.isAxiosError(error)) {
+                    Alert.alert(error.response?.data.detail);
+                }
+            }
         }
+
     }
 
     return (

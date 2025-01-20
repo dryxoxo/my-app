@@ -1,4 +1,5 @@
-import axios from "./axios";
+import axiosInstance from "./axios";
+import { AxiosError, AxiosResponse } from 'axios';
 
 export const registerNewAccount = async (fullname: string, phoneNumber: string) => {
     try {
@@ -9,12 +10,13 @@ export const registerNewAccount = async (fullname: string, phoneNumber: string) 
         
         console.log('data send api', JSON.stringify(data, null, 2));
 
-        return await axios.post('/user/register/new-account', JSON.stringify(data), {
+        return await axiosInstance.post('/user/register/new-account', JSON.stringify(data), {
             headers: {
                 'Content-Type': 'application/json'
             }
         });
-    } catch (error) {
-        console.log('error api: ', error);
+    } catch (e) {
+        const error = e as AxiosError<{ detail: string }>;
+        throw error
     }
 }
