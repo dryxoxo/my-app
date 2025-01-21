@@ -30,7 +30,7 @@ const OTPOrganism = () => {
             const result = await userVerifOTP(uniqueId as string, OTP)
             const message = result.data.message
             Alert.alert(message)
-            navigation.navigate('Login')
+            navigation.navigate('Pin')
             console.log("handleOTP:", message)
         } catch (error) {
             try {
@@ -55,7 +55,7 @@ const OTPOrganism = () => {
                 <Text style={{ textAlign: 'center' }}>Enter the OTP sent to <Text style={{ fontWeight: '700' }}>+91 987987333</Text></Text>
             </View>
             <View>
-                <OTPInput onTextChange={setOTP}/>
+                <OTPInput onTextChange={setOTP} type={'otp'}/>
             </View>
             <View style={{ flex: 1 }}>
                 <Text style={{ color: '#B9B9B9' }}>Didn’t you receive the OTP? <Text style={{ color: '#1D3BFF' }}>Resend OTP</Text></Text>

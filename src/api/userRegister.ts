@@ -20,3 +20,11 @@ export const registerNewAccount = async (fullname: string, phoneNumber: string) 
         throw error
     }
 }
+
+export const createPIN = async (pin: string) => {
+    try {
+        
+    } catch (error) {
+        
+    }
+}
