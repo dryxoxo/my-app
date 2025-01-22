@@ -1,12 +1,14 @@
+import { AxiosError } from "axios";
 import axios from "./axios";
 
 const getUser = async (username: string) => {
     try {
         const response = await axios.get(`/user/general/get-user/${username}`)
-        console.log('data api user: ', )
+        console.log('data api user: ',)
         return response.data.data.unique_id
-    } catch (error) {
-        console.log(error)
+    } catch (e) {
+        const error = e as AxiosError<{ detail: string }>;
+        throw error
     }
 }
 
@@ -23,7 +25,8 @@ export const login = async (username: string, password: string) => {
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         });
-    } catch (error) {
-        console.log('error api: ', error);
+    } catch (e) {
+        const error = e as AxiosError<{ detail: string }>;
+        throw error
     }
 }

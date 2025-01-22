@@ -1,9 +1,28 @@
-import { StyleSheet, Text, View } from 'react-native'
-import React from 'react'
+import { Alert, StyleSheet, Text, View } from 'react-native'
+import React, { useState } from 'react'
 import OTPInput from '../../components/moleculs/auth/OTPInput'
 import Button from '../../components/atoms/Button'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../redux/store'
+import { createPIN } from '../../api/userRegister'
 
 const PinPage = () => {
+
+  const [pin, setpin] = useState<string>('')
+  const uniqueId = useSelector((state: RootState) => state.auth.unique_id);
+
+
+  const handleCreatePin = async ()=> {
+    console.log({pin})
+    const result = await createPIN(pin, uniqueId as string)
+    console.log({result})
+    const accessToken = result.data.access_token
+    const refreshToken = result.data.refresh_token
+    const tokenType = result.data.token_type
+
+    Alert.alert(`Token: ${accessToken}\nRefresh Token: ${refreshToken}\nToken Type: ${tokenType}`);
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.innerContainer}>
@@ -12,13 +31,13 @@ const PinPage = () => {
           <Text style={styles.subtitle}>For security purposes, please create your pin</Text>
         </View>
         <View>
-          <OTPInput type='pin' />
+          <OTPInput type='pin' onTextChange={setpin}/>
         </View>
         <View style={styles.forgetPinContainer}>
           <Text style={styles.forgetPinText}>Forget PIN?</Text>
         </View>
         <View style={styles.buttonContainer}>
-          <Button text={'Verify'} variant={'primary'} />
+          <Button text={'Verify'} variant={'primary'} onPress={handleCreatePin}/>
         </View>
       </View>
     </View>

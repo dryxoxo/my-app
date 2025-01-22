@@ -21,10 +21,15 @@ export const registerNewAccount = async (fullname: string, phoneNumber: string) 
     }
 }
 
-export const createPIN = async (pin: string) => {
+export const createPIN = async (pin: string, uniqueId: string) => {
     try {
-        
-    } catch (error) {
-        
+        return await axiosInstance.patch(`/user/register/create-pin/${uniqueId}`, JSON.stringify({pin}), {
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+    } catch (e) {
+        const error = e as AxiosError<{ detail: string }>;
+        throw error
     }
 }
